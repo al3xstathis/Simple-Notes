@@ -4,9 +4,13 @@ import styled from 'styled-components'
 import {FlexBox} from "../../styles";
 import {config} from "../../config";
 import {Button, Container} from "@mantine/core";
+import {useCreateUser} from "../../hooks/user.hooks";
+import {useNotifications} from "@mantine/notifications";
 
 
 const Login = () => {
+    const createUser = useCreateUser()
+    const notification = useNotifications()
 
     const google = () => {
         const provider = new GoogleAuthProvider();
@@ -16,9 +20,19 @@ const Login = () => {
             prompt: 'select_account'
         });
         signInWithPopup(auth, provider)
-            .then(() => {
-
+            .then((res) => {
+                let user = {
+                    name: res.user.displayName,
+                    email: res.user.email,
+                    uid: res.user.uid
+                }
+                createUser.mutate(user)
+                notification.showNotification({
+                    title: 'Successfully logged in.',
+                    autoClose: 2000
+                })
             })
+
     }
 
     return (

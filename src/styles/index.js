@@ -1,8 +1,9 @@
 import styled from "styled-components"
 import {Button} from "@mantine/core";
 import {config} from "../config";
+import {motion} from 'framer-motion';
 
-export const FlexBox = styled.div`
+export const FlexBox = styled(motion.div)`
 	display: flex;
 	flex-direction: ${props => props.direction || props.dir || "row"};
 	justify-content: ${props => props.justify || "flex-start"};

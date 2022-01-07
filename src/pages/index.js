@@ -5,11 +5,12 @@ import Notes from "./notes";
 
 const Nav = () => {
     return (
-        <Routes>
-            <Route path="/notes/:id" exact  />
-            <Route path="/notes" exact element={<Notes/>}/>
-            <Route path="/login" exact element={<Login/>}/>
-        </Routes>
+        <>
+            <Routes>
+                <Route path="/notes" exact element={<Notes/>}/>
+                <Route path="/login" exact element={<Login/>}/>
+            </Routes>
+        </>
     )
 }
 export default Nav

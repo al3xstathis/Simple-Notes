@@ -1,31 +1,34 @@
-import React from 'react'
+import React, {useState} from 'react'
 import styled from "styled-components";
 import {FlexBox, StyledButton} from "../../styles";
-import {useAddLesson, useAddNote, useGetNotes} from "../../hooks/note.hooks";
+import {useAddNote, useGetNotes} from "../../hooks/note.hooks";
 import {config} from "../../config";
-import {doc, setDoc} from 'firebase/firestore'
-import {db} from "../../index";
 import moment from "moment";
 import {getAuth} from 'firebase/auth'
 import {v4 as uuidv4} from 'uuid'
 import {useQueryClient} from "react-query";
+import {Paper} from "@mantine/core";
+import {useNavigate} from "react-router";
+import Note from "./Note";
 
 const Notes = () => {
     const {data: notes} = useGetNotes()
+    const navigate = useNavigate()
     const auth = getAuth()
     const client = useQueryClient()
     const pinned = notes?.notes.filter(o => o.pinned === true)
     const notPinned = notes?.notes.filter(o => o.pinned === false)
     const addNewNote = useAddNote()
+    const [openNote, setOpenNote] = useState(null)
 
     const pinnedList = pinned?.map(o => (
-        <ListItem key={o.uid} onClick={() => console.log(o.title)}>
+        <ListItem key={o.uid} onClick={() => setOpenNote(o)}>
             {o.title}
         </ListItem>
     ))
 
     const notPinnedList = notPinned?.map(o => (
-        <ListItem key={o.uid} onClick={() => console.log(o.title)}>
+        <ListItem key={o.uid} onClick={() => setOpenNote(o)}>
             {o.title}
         </ListItem>
     ))
@@ -42,39 +45,58 @@ const Notes = () => {
         }
         await addNewNote.mutate(newNote, uid)
         await client.invalidateQueries(['notes', auth.currentUser.uid])
-
+        setOpenNote(newNote)
     }
 
     return (
-        <NotesContainer>
-            {pinned?.length > 0 &&
-                <ListContainer align={'flex-start'} direction={'column'}>
-                    <Header justify={'space-between'}>
-                        pinned notes
-                    </Header>
-                    <NotesList direction={'column'}>
-                        {pinnedList}
-                    </NotesList>
+        <>
+            <NotesContainer>
+                {pinned?.length > 0 &&
+                <ListContainer>
+                    <CPaper padding='md' radius='xs' shadow='md'>
+                        <Header justify={'space-between'}>
+                            pinned notes
+                        </Header>
+                        <NotesList direction={'column'}>
+                            {pinnedList}
+                        </NotesList>
+                    </CPaper>
                 </ListContainer>
+                }
+                <ListContainer>
+                    <CPaper padding='md' radius='xs' shadow='md'>
+                        <Header justify={'space-between'}>
+                            all notes
+                            <StyledButton onClick={addNote} rightIcon={<ion-icon name="add-outline"></ion-icon>}
+                                          size='xs'
+                                          variant={'outline'} compact radius={'xs'}>
+                                add note
+                            </StyledButton>
+                        </Header>
+                        <NotesList direction={'column'}>
+                            {notPinnedList}
+                        </NotesList>
+                    </CPaper>
+                </ListContainer>
+            </NotesContainer>
+            {openNote &&
+                <Note setOpenNote={setOpenNote} note={openNote}/>
             }
-            <ListContainer align={'flex-start'} direction={'column'}>
-                <Header justify={'space-between'}>
-                    all notes
-                    <StyledButton onClick={addNote} rightIcon={<ion-icon name="add-outline"></ion-icon>} size='xs' variant={'outline'} compact radius={'xs'}>
-                        add note
-                    </StyledButton>
-                </Header>
-                <NotesList direction={'column'}>
-                    {notPinnedList}
-                </NotesList>
-            </ListContainer>
-        </NotesContainer>
+        </>
     )
 }
 export default Notes
 
 const ListContainer = styled(FlexBox)`
-  padding: 50px;
+  width: 100%;
+  padding: 25px;
+`
+
+const CPaper = styled(Paper)`
+width: 100%;
+display: flex;
+align-items: flex-start;
+flex-direction: column;
 `
 const Header = styled(FlexBox)`
   font-size: 18px;
@@ -82,7 +104,7 @@ const Header = styled(FlexBox)`
 `
 const NotesList = styled(FlexBox)`
   margin-top: 25px;
-  margin-left: 20px;
+  margin-left: 15px;
   color: ${config.colors.grey};
 `
 const ListItem = styled.li`
@@ -93,6 +115,6 @@ const ListItem = styled.li`
 
 const NotesContainer = styled.div`
   background-color: ${config.colors.white};
-  height: 100%;
+  min-height: 100%;
   color: ${config.colors.black};
 `

@@ -6,9 +6,8 @@ import App from './App';
 import {config} from './config/index';
 import {BrowserRouter} from 'react-router-dom';
 import { MantineProvider } from '@mantine/core';
-
-
 import {QueryClient, QueryClientProvider} from "react-query";
+import {NotificationsProvider} from "@mantine/notifications";
 
 initializeApp(config.firebaseConfig)
 export const db = getFirestore()
@@ -19,7 +18,9 @@ ReactDOM.render(
     <QueryClientProvider client={queryClient} contextSharing={true}>
         <MantineProvider>
             <BrowserRouter>
-                <App/>
+                <NotificationsProvider>
+                    <App />
+                </NotificationsProvider>
             </BrowserRouter>
         </MantineProvider>
     </QueryClientProvider>,
