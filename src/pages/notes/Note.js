@@ -8,6 +8,7 @@ import {RichTextEditor} from "@mantine/rte";
 import moment from "moment";
 import {useNotifications} from "@mantine/notifications";
 import {Modal} from "@mantine/core";
+import {IoArrowBackOutline} from "react-icons/io5";
 
 
 const Note = ({note, setOpenNote}) => {
@@ -74,10 +75,10 @@ const Note = ({note, setOpenNote}) => {
                         <CButton variant={'outline'} radius={'xs'} onClick={() => {
                             setOpenNote(null)
                         }}>
-                            <ion-icon name="close-outline"></ion-icon>
+                            <IoArrowBackOutline/>
                         </CButton>
-                        <CInput name="title" onBlur={update} onChange={e => handleChange(e.target.name, e.target.value)}
-                                style={{color: 'grey'}} value={newNote.title}/>
+                        <CInput maxLength='20' name="title" onBlur={update} onChange={e => handleChange(e.target.name, e.target.value)}
+                                style={{color: 'grey'}} placeholder={'Add a title'} value={newNote.title}/>
                     </Header>
                     <Tools justify={'center'}>
                         <ion-icon onClick={pin} style={{
@@ -91,20 +92,19 @@ const Note = ({note, setOpenNote}) => {
                         </ion-icon>
                     </Tools>
                     <Content direction={'column'} align={'flex-start'}>
-                        <Title justify={'space-between'}>
-                            <p>note content</p>
-                            <Date>{moment(newNote.date).format('DD MM yy')}</Date>
+                        <Title justify={'flex-end'}>
+                            <Date>{moment(newNote.date).format('DD/MM/YY')}</Date>
                         </Title>
                         <RichTextEditor
-                            style={{height: '100%'}}
+                            style={{height: '100%', maxWidth: '100%', minWidth: '100%'}}
                             name="content"
                             value={newNote.content}
                             onChange={handleRTF}
                             onBlur={update}
                             controls={[
-                                ['bold', 'italic', 'underline', 'link', 'image'],
-                                ['unorderedList', 'h1', 'h2', 'h3'],
-                                ['sup', 'sub'],
+                                ['bold', 'italic', 'underline'],
+                                ['link'],
+                                ['unorderedList', 'h1'],
                                 ['alignLeft', 'alignCenter', 'alignRight'],
                             ]}
                         />

@@ -10,34 +10,33 @@ import {useQueryClient} from "react-query";
 import {Paper} from "@mantine/core";
 import {useNavigate} from "react-router";
 import Note from "./Note";
+import {IoAddSharp} from "react-icons/io5";
+import ListItem from "./listItem";
 
 const Notes = () => {
     const {data: notes} = useGetNotes()
     const navigate = useNavigate()
     const auth = getAuth()
     const client = useQueryClient()
-    const pinned = notes?.notes.filter(o => o.pinned === true)
-    const notPinned = notes?.notes.filter(o => o.pinned === false)
+    const sortedNotes = notes?.notes.sort((a,b) => moment(b.time).format('DD') - moment(a.time).format('DD'))
+    const pinned = sortedNotes?.filter(o => o.pinned === true)
+    const notPinned = sortedNotes?.filter(o => o.pinned === false)
     const addNewNote = useAddNote()
     const [openNote, setOpenNote] = useState(null)
 
+
     const pinnedList = pinned?.map(o => (
-        <ListItem key={o.uid} onClick={() => setOpenNote(o)}>
-            {o.title}
-        </ListItem>
+        <ListItem onClick={() => setOpenNote(o)} title={o.title} subtitle={moment(o.time).format('DD/MM')}/>
     ))
 
     const notPinnedList = notPinned?.map(o => (
-        <ListItem key={o.uid} onClick={() => setOpenNote(o)}>
-            {o.title}
-        </ListItem>
+        <ListItem onClick={() => setOpenNote(o)} title={o.title} subtitle={moment(o.time).format('DD/MM')}/>
     ))
 
     const addNote = async () => {
         const uid = uuidv4()
         const newNote = {
             time: moment().format(),
-            title: "New Note",
             pinned: false,
             content: null,
             creator: auth.currentUser.uid,
@@ -57,7 +56,7 @@ const Notes = () => {
                         <Header justify={'space-between'}>
                             pinned notes
                         </Header>
-                        <NotesList direction={'column'}>
+                        <NotesList align={'flex-start'} direction={'column'}>
                             {pinnedList}
                         </NotesList>
                     </CPaper>
@@ -67,13 +66,13 @@ const Notes = () => {
                     <CPaper padding='md' radius='xs' shadow='md'>
                         <Header justify={'space-between'}>
                             all notes
-                            <StyledButton onClick={addNote} rightIcon={<ion-icon name="add-outline"></ion-icon>}
+                            <StyledButton onClick={addNote} rightIcon={<IoAddSharp/>}
                                           size='xs'
                                           variant={'outline'} compact radius={'xs'}>
                                 add note
                             </StyledButton>
                         </Header>
-                        <NotesList direction={'column'}>
+                        <NotesList align={'flex-start'} direction={'column'}>
                             {notPinnedList}
                         </NotesList>
                     </CPaper>
@@ -89,7 +88,8 @@ export default Notes
 
 const ListContainer = styled(FlexBox)`
   width: 100%;
-  padding: 25px;
+  padding: 15px;
+  margin-inside: 15px;
 `
 
 const CPaper = styled(Paper)`
@@ -103,14 +103,10 @@ const Header = styled(FlexBox)`
   width: 100%;
 `
 const NotesList = styled(FlexBox)`
-  margin-top: 25px;
-  margin-left: 15px;
+  padding-top: 20px;
+  padding-left: 10px;
+  width: 90%;
   color: ${config.colors.grey};
-`
-const ListItem = styled.li`
-  list-style: none;
-  padding-bottom: 10px;
-  text-decoration: underline;
 `
 
 const NotesContainer = styled.div`

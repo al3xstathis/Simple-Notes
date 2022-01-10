@@ -6,6 +6,7 @@ import {config} from "../../config";
 import {Button, Container} from "@mantine/core";
 import {useCreateUser} from "../../hooks/user.hooks";
 import {useNotifications} from "@mantine/notifications";
+import {IoLogoGoogle} from "react-icons/io5";
 
 
 const Login = () => {
@@ -38,10 +39,10 @@ const Login = () => {
     return (
         <LoginContainer direction={'column'} justify={"center"}>
             <Container>
-                Simple Notes
+                an app for taking simple notes
             </Container>
-            <Button onClick={google} style={{backgroundColor: config.colors.red}} radius="xs">
-                <ion-icon name="logo-google"></ion-icon>
+            <Button  onClick={google} leftIcon={<IoLogoGoogle/>} style={{backgroundColor: config.colors.red}} radius="xs">
+                login with google
             </Button>
         </LoginContainer>
     )

@@ -10,7 +10,6 @@ import styled from 'styled-components'
 
 function App() {
     const navigate = useNavigate()
-    const location = useLocation()
     const auth = getAuth();
     const [loggedIn, setLoggedIn] = useState(null);
 
@@ -45,8 +44,8 @@ function App() {
             <Header height={50}>
                 <div style={{width: '100%', display: 'flex', alignItems: 'center', height: '100%', justifyContent: 'center'}}>
                     <h3>Simple Notes</h3>
-                    <CMenu >
-                        <Menu.Label>Settings</Menu.Label>
+                    <CMenu shadow='lg' size='lg'>
+                        <Menu.Label>{auth.currentUser?.displayName}</Menu.Label>
                         <Menu.Item onClick={signOut}>
                             Sign Out
                         </Menu.Item>
