@@ -26,11 +26,11 @@ const Notes = () => {
 
 
     const pinnedList = pinned?.map(o => (
-        <ListItem onClick={() => setOpenNote(o)} title={o.title} subtitle={moment(o.time).format('DD/MM')}/>
+        <ListItem key={o.uid} onClick={() => setOpenNote(o)} title={o.title} subtitle={moment(o.time).format('DD/MM')}/>
     ))
 
     const notPinnedList = notPinned?.map(o => (
-        <ListItem onClick={() => setOpenNote(o)} title={o.title} subtitle={moment(o.time).format('DD/MM')}/>
+        <ListItem key={o.uid} onClick={() => setOpenNote(o)} title={o.title} subtitle={moment(o.time).format('DD/MM')}/>
     ))
 
     const addNote = async () => {
