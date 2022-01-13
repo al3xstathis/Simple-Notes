@@ -7,35 +7,39 @@ import moment from "moment";
 import {getAuth} from 'firebase/auth'
 import {v4 as uuidv4} from 'uuid'
 import {useQueryClient} from "react-query";
-import {Divider, Input} from "@mantine/core";
-import {useNavigate} from "react-router";
+import {Input} from "@mantine/core";
 import Note from "./Note";
 import {IoAddSharp, IoSearch} from "react-icons/io5";
 import NotePreview from "./NotePreview";
+import {useNavigate} from "react-router";
 
 const Notes = () => {
     const {data: notes} = useGetNotes()
+    const navigate = useNavigate()
     const auth = getAuth()
     const client = useQueryClient()
     const sortedNotes = notes?.notes.sort((a, b) => moment(b.time).format('DD') - moment(a.time).format('DD'))
     let pinned = sortedNotes?.filter(o => o.pinned === true)
     let notPinned = sortedNotes?.filter(o => o.pinned === false)
     const addNewNote = useAddNote()
-    const [openNote, setOpenNote] = useState(null)
     const [searchKey, setSearchKey] = useState('')
 
 
     const pinnedList = pinned?.filter(o =>
         o.content.toLocaleLowerCase().includes(searchKey.toLocaleLowerCase()) || o.title.toLocaleLowerCase().includes(searchKey.toLocaleLowerCase())
     ).map(o => (
-        <NotePreview note={o} key={o.uid} onClick={() => setOpenNote(o)}/>
+        <NotePreview note={o} key={o.uid} onClick={() => OpenNote(o)}/>
     ))
 
     const notPinnedList = notPinned?.filter(o =>
         o.content.toLocaleLowerCase().includes(searchKey.toLocaleLowerCase()) || o.title.toLocaleLowerCase().includes(searchKey.toLocaleLowerCase())
     ).map(o => (
-        <NotePreview note={o} key={o.uid} onClick={() => setOpenNote(o)}/>
+        <NotePreview note={o} key={o.uid} onClick={() => OpenNote(o)}/>
     ))
+
+    const OpenNote = (o) => {
+        navigate(`/notes/${o.uid}`, { replace: true });
+    }
 
     const addNote = async () => {
         const uid = uuidv4()
@@ -50,7 +54,7 @@ const Notes = () => {
         }
         await addNewNote.mutate(newNote, uid)
         await client.invalidateQueries(['notes', auth.currentUser.uid])
-        setOpenNote(newNote)
+        navigate(`/notes/${uid}`, { replace: true })
     }
 
     return (
@@ -89,9 +93,6 @@ const Notes = () => {
                     </FlexBox>
                 </ListContainer>
             </NotesContainer>
-            {openNote &&
-            <Note setOpenNote={setOpenNote} note={openNote}/>
-            }
         </div>
     )
 }

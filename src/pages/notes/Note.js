@@ -3,19 +3,23 @@ import styled from 'styled-components'
 import {FlexBox, StyledButton} from "../../styles";
 import {config} from "../../config";
 import {AnimatePresence} from "framer-motion";
-import {useDeleteNote, useUpdateNote} from "../../hooks/note.hooks";
+import {useDeleteNote, useGetNotes, useUpdateNote} from "../../hooks/note.hooks";
 import moment from "moment";
 import {useNotifications} from "@mantine/notifications";
-import {ColorInput, ColorSwatch, Modal} from "@mantine/core";
+import {ColorInput, Modal} from "@mantine/core";
 import {IoArrowBackOutline} from "react-icons/io5";
+import {useNavigate, useParams} from "react-router";
 
 
-const Note = ({note, setOpenNote}) => {
-    const [newNote, setNewNote] = useState(note)
+const Note = () => {
+    const {noteId} = useParams()
+    const {data: notes} = useGetNotes()
+    const [newNote, setNewNote] = useState(notes?.notes.find(o => o.uid === noteId) || {})
     const updateNote = useUpdateNote()
     const notification = useNotifications()
     const [deleteDoc, setDeleteDoc] = useState(null)
     const useDelete = useDeleteNote()
+    const navigate = useNavigate()
 
 
     useEffect(() => {
@@ -38,7 +42,7 @@ const Note = ({note, setOpenNote}) => {
 
     const del = async () => {
         setDeleteDoc(false)
-        setOpenNote(null)
+        navigate('/notes')
         await useDelete.mutate(newNote.uid)
     }
 
@@ -48,7 +52,7 @@ const Note = ({note, setOpenNote}) => {
 
     const pin = async () => {
         notification.showNotification({
-            title: !newNote.pinned ? 'Pinned note' : 'Unpinned note',
+            title: !newNote?.pinned ? 'Pinned note' : 'Unpinned note',
             autoClose: 2000
         })
 
@@ -59,83 +63,81 @@ const Note = ({note, setOpenNote}) => {
     }
 
     return (
-            <AnimatePresence>
-                {note &&
-                <NoteContainer
-                    initial={{y: 100, opacity: 0}}
-                    animate={{y: 0, opacity: 1}}
-                    exit={{y: 100, opacity: 0}}
-                    transition={{duration: 0.5}}
-                    align={'flex-start'}
-                    direction={'column'}
-                >
-                    <Header justify={'center'}>
-                        <CButton variant={'outline'} radius={'xs'} onClick={() => {
-                            setOpenNote(null)
-                        }}>
-                            <IoArrowBackOutline/>
-                        </CButton>
-                        <CInput maxLength='20' name="title" onBlur={update}
-                                onChange={e => handleChange(e.target.name, e.target.value)}
-                                style={{color: 'grey'}} placeholder={'Add a title'} value={newNote.title}/>
-                    </Header>
-                    <Tools justify={'center'}>
-                        <ion-icon onClick={pin} style={{
-                            padding: '10px',
-                            color: newNote.pinned ? config.colors.red : config.colors.black90
-                        }} name='pin-outline'>
-
-                        </ion-icon>
-                        <ion-icon onClick={() => setDeleteDoc(newNote)} style={{padding: '10px'}} name='trash-outline'>
-
-                        </ion-icon>
-                    </Tools>
-                    <Content direction={'column'} align={'flex-start'}>
-                        <Title justify={'space-between'}>
-                            <CColorInput
-                                style={{ fontSize: 16 }}
-                                onBlur={update}
-                                value={newNote.color}
-                                onChange={(e) => handleColor(e)}
-                                name="color"
-                                // withPicker={false}
-                                placeholder={'Pick Color'}
-                                variant={'unstyled'}
-                            />
-                            <Date>{moment(newNote.date).format('DD/MM/YY')}</Date>
-                        </Title>
-
-                        <TextArea
-                            name="content"
-                            value={newNote.content}
+        <AnimatePresence>
+            <NoteContainer
+                initial={{y: 100, opacity: 0}}
+                animate={{y: 0, opacity: 1}}
+                exit={{y: 100, opacity: 0}}
+                transition={{duration: 0.5}}
+                align={'flex-start'}
+                direction={'column'}
+            >
+                <Header justify={'center'}>
+                    <CButton variant={'outline'} radius={'xs'} onClick={() => {
+                        navigate('/notes')
+                    }}>
+                        <IoArrowBackOutline/>
+                    </CButton>
+                    <CInput maxLength='20' name="title" onBlur={update}
                             onChange={e => handleChange(e.target.name, e.target.value)}
-                            onBlur={update}
-                            placeholder={'Add a note here'}
-                        />
-                    </Content>
+                            style={{color: 'grey'}} placeholder={'Add a title'} value={newNote.title}/>
+                </Header>
+                <Tools justify={'center'}>
+                    <ion-icon onClick={pin} style={{
+                        padding: '10px',
+                        color: newNote?.pinned ? config.colors.red : config.colors.black90
+                    }} name='pin-outline'>
 
-                    <Modal
-                        opened={deleteDoc}
-                        onClose={() => setDeleteDoc(null)}
-                        centered
-                        hideCloseButton
-                        title="Are you sure you want to delete this note?"
-                    >
-                        <FlexBox justify={'center'} width={'100%'}>
-                            <StyledButton size='md'
-                                          variant={'outline'} compact radius={'xs'} onClick={del}>Delete</StyledButton>
-                        </FlexBox>
-                    </Modal>
-                </NoteContainer>
-                }
-            </AnimatePresence>
+                    </ion-icon>
+                    <ion-icon onClick={() => setDeleteDoc(newNote)} style={{padding: '10px'}} name='trash-outline'>
+
+                    </ion-icon>
+                </Tools>
+                <Content direction={'column'} align={'flex-start'}>
+                    <Title justify={'space-between'}>
+                        <CColorInput
+                            style={{fontSize: 16}}
+                            onBlur={update}
+                            value={newNote.color}
+                            onChange={(e) => handleColor(e)}
+                            name="color"
+                            // withPicker={false}
+                            placeholder={'Pick Color'}
+                            variant={'unstyled'}
+                        />
+                        <Date>{moment(newNote.date).format('DD/MM/YY')}</Date>
+                    </Title>
+
+                    <TextArea
+                        name="content"
+                        value={newNote.content}
+                        onChange={e => handleChange(e.target.name, e.target.value)}
+                        onBlur={update}
+                        placeholder={'Add a note here'}
+                    />
+                </Content>
+
+                <Modal
+                    opened={deleteDoc}
+                    onClose={() => setDeleteDoc(null)}
+                    centered
+                    hideCloseButton
+                    title="Are you sure you want to delete this note?"
+                >
+                    <FlexBox justify={'center'} width={'100%'}>
+                        <StyledButton size='md'
+                                      variant={'outline'} compact radius={'xs'} onClick={del}>Delete</StyledButton>
+                    </FlexBox>
+                </Modal>
+            </NoteContainer>
+        </AnimatePresence>
     )
 }
 export default Note
 
 const NoteContainer = styled(FlexBox)`
   z-index: 1;
-  height: 100%;
+  height: 100vh;
   position: absolute;
   top: 0;
   width: 100%;
