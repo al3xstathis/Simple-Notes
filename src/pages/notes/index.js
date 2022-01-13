@@ -7,30 +7,34 @@ import moment from "moment";
 import {getAuth} from 'firebase/auth'
 import {v4 as uuidv4} from 'uuid'
 import {useQueryClient} from "react-query";
-import {Paper} from "@mantine/core";
+import {Divider, Input} from "@mantine/core";
 import {useNavigate} from "react-router";
 import Note from "./Note";
-import {IoAddSharp} from "react-icons/io5";
-import ListItem from "./listItem";
+import {IoAddSharp, IoSearch} from "react-icons/io5";
+import NotePreview from "./NotePreview";
 
 const Notes = () => {
     const {data: notes} = useGetNotes()
-    const navigate = useNavigate()
     const auth = getAuth()
     const client = useQueryClient()
-    const sortedNotes = notes?.notes.sort((a,b) => moment(b.time).format('DD') - moment(a.time).format('DD'))
-    const pinned = sortedNotes?.filter(o => o.pinned === true)
-    const notPinned = sortedNotes?.filter(o => o.pinned === false)
+    const sortedNotes = notes?.notes.sort((a, b) => moment(b.time).format('DD') - moment(a.time).format('DD'))
+    let pinned = sortedNotes?.filter(o => o.pinned === true)
+    let notPinned = sortedNotes?.filter(o => o.pinned === false)
     const addNewNote = useAddNote()
     const [openNote, setOpenNote] = useState(null)
+    const [searchKey, setSearchKey] = useState('')
 
 
-    const pinnedList = pinned?.map(o => (
-        <ListItem key={o.uid} onClick={() => setOpenNote(o)} title={o.title} subtitle={moment(o.time).format('DD/MM')}/>
+    const pinnedList = pinned?.filter(o =>
+        o.content.toLocaleLowerCase().includes(searchKey.toLocaleLowerCase()) || o.title.toLocaleLowerCase().includes(searchKey.toLocaleLowerCase())
+    ).map(o => (
+        <NotePreview note={o} key={o.uid} onClick={() => setOpenNote(o)}/>
     ))
 
-    const notPinnedList = notPinned?.map(o => (
-        <ListItem key={o.uid} onClick={() => setOpenNote(o)} title={o.title} subtitle={moment(o.time).format('DD/MM')}/>
+    const notPinnedList = notPinned?.filter(o =>
+        o.content.toLocaleLowerCase().includes(searchKey.toLocaleLowerCase()) || o.title.toLocaleLowerCase().includes(searchKey.toLocaleLowerCase())
+    ).map(o => (
+        <NotePreview note={o} key={o.uid} onClick={() => setOpenNote(o)}/>
     ))
 
     const addNote = async () => {
@@ -38,7 +42,9 @@ const Notes = () => {
         const newNote = {
             time: moment().format(),
             pinned: false,
-            content: null,
+            title: '',
+            content: '',
+            color: '',
             creator: auth.currentUser.uid,
             uid: uid
         }
@@ -48,69 +54,72 @@ const Notes = () => {
     }
 
     return (
-        <>
+        <div>
+            <FlexBox justify={'space-between'} style={{paddingRight: 10}}>
+                <CInput onChange={(e) => setSearchKey(e.target.value)} icon={<IoSearch/>}
+                        placeholder={'search for note'}
+                        variant={'unstyled'}
+                />
+                <StyledButton onClick={addNote} rightIcon={<IoAddSharp/>}
+                              size='sm'
+                              compact radius={'sm'}>
+                    add note
+                </StyledButton>
+            </FlexBox>
             <NotesContainer>
                 {pinned?.length > 0 &&
-                <ListContainer>
-                    <CPaper padding='md' radius='xs' shadow='md'>
-                        <Header justify={'space-between'}>
-                            pinned notes
-                        </Header>
-                        <NotesList align={'flex-start'} direction={'column'}>
-                            {pinnedList}
-                        </NotesList>
-                    </CPaper>
+                <ListContainer direction={'column'} align={'flex-start'}>
+                    <Header justify={'space-between'}>
+                        pinned
+                    </Header>
+                    <FlexBox style={{display: 'inline-flex', gap: '1rem', paddingTop: '1rem'}} wrap={'wrap'}
+                             align={'space-between'}>
+                        {pinnedList}
+                    </FlexBox>
+
                 </ListContainer>
                 }
-                <ListContainer>
-                    <CPaper padding='md' radius='xs' shadow='md'>
-                        <Header justify={'space-between'}>
-                            all notes
-                            <StyledButton onClick={addNote} rightIcon={<IoAddSharp/>}
-                                          size='xs'
-                                          variant={'outline'} compact radius={'xs'}>
-                                add note
-                            </StyledButton>
-                        </Header>
-                        <NotesList align={'flex-start'} direction={'column'}>
-                            {notPinnedList}
-                        </NotesList>
-                    </CPaper>
+                <ListContainer direction={'column'} align={'flex-start'}>
+                    <Header justify={'space-between'}>
+                        all notes
+                    </Header>
+                    <FlexBox style={{display: 'inline-flex', gap: '1rem', paddingTop: '1rem'}} wrap={'wrap'}
+                             align={'space-between'}>
+                        {notPinnedList}
+                    </FlexBox>
                 </ListContainer>
             </NotesContainer>
             {openNote &&
-                <Note setOpenNote={setOpenNote} note={openNote}/>
+            <Note setOpenNote={setOpenNote} note={openNote}/>
             }
-        </>
+        </div>
     )
 }
 export default Notes
 
 const ListContainer = styled(FlexBox)`
   width: 100%;
-  padding: 15px;
-  margin-inside: 15px;
+  padding-top: 0;
+  padding-left: 16px;
+  padding-right: 16px;
+  padding-bottom: 32px;
+  margin-inside: 16px;
 `
 
-const CPaper = styled(Paper)`
-width: 100%;
-display: flex;
-align-items: flex-start;
-flex-direction: column;
-`
 const Header = styled(FlexBox)`
-  font-size: 18px;
+  font-size: 16px;
   width: 100%;
-`
-const NotesList = styled(FlexBox)`
-  padding-top: 20px;
-  padding-left: 10px;
-  width: 90%;
-  color: ${config.colors.grey};
+  color: ${config.colors.black.black0};
+  opacity: .9;
 `
 
 const NotesContainer = styled.div`
-  background-color: ${config.colors.white};
+  // background-color: ${config.colors.white};
   min-height: 100%;
   color: ${config.colors.black};
+`
+
+const CInput = styled(Input)`
+  // background-color: ${config.colors.white};
+  padding: 8px;
 `

@@ -13,6 +13,6 @@ export const FlexBox = styled(motion.div)`
 `
 
 export const StyledButton = styled(Button)`
-  color: ${props => props.color ? props.color : config.colors.black};
-  border-color: ${props => props.border ? props.border : config.colors.black};
+  color: ${props => props.color ? props.color : config.colors.black.black90};
+  background-color: transparent;
 `

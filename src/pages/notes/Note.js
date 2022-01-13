@@ -4,10 +4,9 @@ import {FlexBox, StyledButton} from "../../styles";
 import {config} from "../../config";
 import {AnimatePresence} from "framer-motion";
 import {useDeleteNote, useUpdateNote} from "../../hooks/note.hooks";
-import {RichTextEditor} from "@mantine/rte";
 import moment from "moment";
 import {useNotifications} from "@mantine/notifications";
-import {Modal} from "@mantine/core";
+import {ColorInput, ColorSwatch, Modal} from "@mantine/core";
 import {IoArrowBackOutline} from "react-icons/io5";
 
 
@@ -30,10 +29,10 @@ const Note = ({note, setOpenNote}) => {
         })
     }
 
-    const handleRTF = (value) => {
+    const handleColor = (value) => {
         setNewNote({
             ...newNote,
-            content: value
+            color: value
         })
     }
 
@@ -60,7 +59,6 @@ const Note = ({note, setOpenNote}) => {
     }
 
     return (
-        <>
             <AnimatePresence>
                 {note &&
                 <NoteContainer
@@ -77,13 +75,14 @@ const Note = ({note, setOpenNote}) => {
                         }}>
                             <IoArrowBackOutline/>
                         </CButton>
-                        <CInput maxLength='20' name="title" onBlur={update} onChange={e => handleChange(e.target.name, e.target.value)}
+                        <CInput maxLength='20' name="title" onBlur={update}
+                                onChange={e => handleChange(e.target.name, e.target.value)}
                                 style={{color: 'grey'}} placeholder={'Add a title'} value={newNote.title}/>
                     </Header>
                     <Tools justify={'center'}>
                         <ion-icon onClick={pin} style={{
                             padding: '10px',
-                            color: newNote.pinned ? config.colors.red : config.colors.black
+                            color: newNote.pinned ? config.colors.red : config.colors.black90
                         }} name='pin-outline'>
 
                         </ion-icon>
@@ -92,21 +91,26 @@ const Note = ({note, setOpenNote}) => {
                         </ion-icon>
                     </Tools>
                     <Content direction={'column'} align={'flex-start'}>
-                        <Title justify={'flex-end'}>
+                        <Title justify={'space-between'}>
+                            <CColorInput
+                                style={{ fontSize: 16 }}
+                                onBlur={update}
+                                value={newNote.color}
+                                onChange={(e) => handleColor(e)}
+                                name="color"
+                                // withPicker={false}
+                                placeholder={'Pick Color'}
+                                variant={'unstyled'}
+                            />
                             <Date>{moment(newNote.date).format('DD/MM/YY')}</Date>
                         </Title>
-                        <RichTextEditor
-                            style={{height: '100%', maxWidth: '100%', minWidth: '100%'}}
+
+                        <TextArea
                             name="content"
                             value={newNote.content}
-                            onChange={handleRTF}
+                            onChange={e => handleChange(e.target.name, e.target.value)}
                             onBlur={update}
-                            controls={[
-                                ['bold', 'italic', 'underline'],
-                                ['link'],
-                                ['unorderedList', 'h1'],
-                                ['alignLeft', 'alignCenter', 'alignRight'],
-                            ]}
+                            placeholder={'Add a note here'}
                         />
                     </Content>
 
@@ -119,13 +123,12 @@ const Note = ({note, setOpenNote}) => {
                     >
                         <FlexBox justify={'center'} width={'100%'}>
                             <StyledButton size='md'
-                                     variant={'outline'} compact radius={'xs'} onClick={del}>Delete</StyledButton>
+                                          variant={'outline'} compact radius={'xs'} onClick={del}>Delete</StyledButton>
                         </FlexBox>
                     </Modal>
                 </NoteContainer>
                 }
             </AnimatePresence>
-        </>
     )
 }
 export default Note
@@ -152,6 +155,7 @@ const CButton = styled(StyledButton)`
   border: none;
   background-color: transparent;
   font-size: 30px;
+  color: ${config.colors.black.black90};
 `
 
 const Tools = styled(FlexBox)`
@@ -176,8 +180,27 @@ const Title = styled(FlexBox)`
 height: 15px;
 margin-bottom: 15px;
 width: 100%;
+font-size: 16px;
 `
 
 const Date = styled.p`
   opacity: 0.5;
+`
+
+const TextArea = styled.textarea`
+  min-height: 50%;
+  max-width: 100%;
+  min-width: 100%;
+  border: none;
+  padding: 10px;
+  font-size: 16px;
+  background-color: ${config.colors.white};
+  &:focus {
+    outline: none;
+  }
+`
+
+const CColorInput = styled(ColorInput)`
+  background-color: transparent;
+  font-size: 16px;
 `

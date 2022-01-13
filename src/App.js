@@ -42,7 +42,7 @@ function App() {
     return (
         <>
             <Header height={50}>
-                <div style={{width: '100%', display: 'flex', alignItems: 'center', height: '100%', justifyContent: 'center'}}>
+                <div style={{width: '100%', display: 'flex', alignItems: 'center', height: '100%', justifyContent: 'flex-start', paddingLeft: 16}}>
                     <h3>Simple Notes</h3>
                     <CMenu shadow='lg' size='lg'>
                         <Menu.Label>{auth.currentUser?.displayName}</Menu.Label>

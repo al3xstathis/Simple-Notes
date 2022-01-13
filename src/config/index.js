@@ -9,9 +9,20 @@ export const config = {
         measurementId: "G-N6HCSKRBQ2"
     },
     colors: {
-        black: '#2b2d42',
+        black: {
+            black0: '#2b2d42',
+            black10: '#27293b',
+            black20: '#222435',
+            black30: '#1e1f2e',
+            black40: '#1a1b28',
+            black50: '#161721',
+            black60: '#11121a',
+            black70: '#0d0d14',
+            black80: '#09090d',
+            black90: '#040407',
+        },
         white: '#edf2f4',
-        grey: '#8d99ae',
+
         red: '#d90429'
     }
 }
