@@ -4,6 +4,7 @@ import Login from "./auth/login";
 import Notes from "./notes";
 import Note from "./notes/Note";
 import {AnimatePresence} from "framer-motion";
+import Settings from "./settings";
 
 const Nav = () => {
     return (
@@ -12,6 +13,7 @@ const Nav = () => {
                 <Route path="notes" exact element={<Notes/>}/>
                 <Route path="/notes/:noteId" element={<Note/>}/>
                 <Route path="login" exact element={<Login/>}/>
+                <Route path="settings" element={<Settings/>}/>
             </Routes>
         </AnimatePresence>
     )

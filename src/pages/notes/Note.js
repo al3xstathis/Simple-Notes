@@ -7,8 +7,8 @@ import {useDeleteNote, useGetNotes, useUpdateNote} from "../../hooks/note.hooks"
 import moment from "moment";
 import {useNotifications} from "@mantine/notifications";
 import {ColorInput, Modal} from "@mantine/core";
-import {IoArrowBackOutline} from "react-icons/io5";
 import {useNavigate, useParams} from "react-router";
+import {IoIosArrowRoundBack} from "react-icons/io";
 
 
 const Note = () => {
@@ -71,27 +71,28 @@ const Note = () => {
                 transition={{duration: 0.5}}
                 direction={'column'}
             >
-                <Header justify={'center'}>
+                <Header justify={'space-between'}>
                     <CButton variant={'outline'} radius={'xs'} onClick={() => {
                         navigate('/notes')
                     }}>
-                        <IoArrowBackOutline/>
+                        <IoIosArrowRoundBack/>
                     </CButton>
                     <CInput maxLength='20' name="title" onBlur={update}
                             onChange={e => handleChange(e.target.name, e.target.value)}
                             placeholder={'Add a title'} value={newNote.title}/>
+                    <Tools justify={'center'}>
+                        <ion-icon onClick={pin} style={{
+                            padding: '4px',
+                            color: newNote?.pinned ? config.colors.red : config.colors.black90
+                        }} name='pin-outline'>
+
+                        </ion-icon>
+                        <ion-icon onClick={() => setDeleteDoc(newNote)} style={{padding: '4px'}} name='trash-outline'>
+
+                        </ion-icon>
+                    </Tools>
                 </Header>
-                <Tools justify={'center'}>
-                    <ion-icon onClick={pin} style={{
-                        padding: '10px',
-                        color: newNote?.pinned ? config.colors.red : config.colors.black90
-                    }} name='pin-outline'>
 
-                    </ion-icon>
-                    <ion-icon onClick={() => setDeleteDoc(newNote)} style={{padding: '10px'}} name='trash-outline'>
-
-                    </ion-icon>
-                </Tools>
                 <Content direction={'column'} align={'flex-start'}>
                     <Title justify={'space-between'}>
                         <CColorInput
@@ -140,31 +141,33 @@ const NoteContainer = styled(FlexBox)`
 `
 
 const Header = styled(FlexBox)`
-  padding: 25px;
-  padding-top: 35px;
-  width: 100%;
+  padding: 0.4rem 1rem;
+  max-width: 100%;
   font-size: 20px;
 `
 
 const CButton = styled(StyledButton)`
-  position: absolute;
-  left: 0;
+  display: flex;
+  padding: 0;
   border: none;
   background-color: transparent;
+  width: 20%;
   font-size: 30px;
   color: ${config.colors.black.black90};
+  justify-content: flex-start;
 `
 
 const Tools = styled(FlexBox)`
   height: 30px;
-  width: 100%;
   font-size: 24px;
+  width: 20%;
 `
 
 const CInput = styled.input`
   border: none;
   font-size: 20px;
   text-align: center;
+  width: 60%;
 
   &:focus {
     outline: none;
@@ -172,14 +175,15 @@ const CInput = styled.input`
 `
 
 const Content = styled(FlexBox)`
+  border-top: 0.1px solid rgba(128, 128, 128, 0.21);
   width: 100%;
-  padding: 15px;
+  padding: 1rem;
   height: 100%;
   max-width: 600px;
 `
 const Title = styled(FlexBox)`
-  height: 15px;
-  margin-bottom: 15px;
+  height: 1rem;
+  margin-bottom: 1rem;
   width: 100%;
   font-size: 16px;
 `

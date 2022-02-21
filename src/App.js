@@ -1,16 +1,19 @@
 import './styles.scss'
 import React, {useEffect, useState} from "react";
-import {Route, Routes, useNavigate} from 'react-router-dom';
+import {Route, Routes, useLocation, useNavigate} from 'react-router-dom';
 import {getAuth, onAuthStateChanged} from "firebase/auth"
 import Login from "./pages/auth/login";
 import Nav from "./pages";
 import {Header, Menu} from "@mantine/core";
 import styled from "styled-components";
+import {IoIosCog} from "react-icons/io";
+import {IoHomeOutline} from "react-icons/io5";
 
 
 function App() {
     const navigate = useNavigate()
     const auth = getAuth();
+    const location = useLocation()
     const [loggedIn, setLoggedIn] = useState(null);
 
     useEffect(() => {
@@ -34,9 +37,6 @@ function App() {
         )
     }
 
-    const signOut = () => {
-        auth.signOut()
-    }
 
 
     return (
@@ -47,16 +47,21 @@ function App() {
                     display: 'flex',
                     alignItems: 'center',
                     height: '100%',
-                    justifyContent: 'flex-start',
-                    paddingLeft: 16
+                    justifyContent: 'space-between',
+                    paddingLeft: 16,
+                    paddingRight: 16
                 }}>
                     <h3>Simple Notes</h3>
-                    <CMenu shadow='lg' size='lg'>
-                        <Menu.Label>{auth.currentUser?.displayName}</Menu.Label>
-                        <Menu.Item onClick={signOut}>
-                            Sign Out
-                        </Menu.Item>
-                    </CMenu>
+                    {location.pathname === '/settings' ?
+                        <Home onClick={() => navigate('/notes')}>
+                            <IoHomeOutline/>
+                        </Home>
+                        : location.pathname === '/notes' ?
+                        <Settings onClick={() => navigate('/settings')}>
+                            <IoIosCog/>
+                        </Settings>
+                        : location.pathname === '/notes/:noteid' && null
+                    }
                 </div>
             </Header>
             <Nav/>
@@ -66,7 +71,12 @@ function App() {
 
 export default App;
 
-const CMenu = styled(Menu)`
-  position: absolute;
-  right: 1em;
+const Settings = styled.div`
+  font-size: 24px;
+  height: 24px;
+`
+
+const Home = styled.div`
+  font-size: 24px;
+  height: 24px;
 `
