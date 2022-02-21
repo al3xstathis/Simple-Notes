@@ -1,6 +1,6 @@
-import {useMutation, useQuery, useQueryClient} from "react-query";
-import { getAuth } from "firebase/auth";
-import {collection, query, where, getDocs, setDoc, doc} from 'firebase/firestore'
+import {useMutation} from "react-query";
+import {getAuth} from "firebase/auth";
+import {doc,setDoc} from 'firebase/firestore'
 import {db} from '../index'
 
 export const useCreateUser = () => {

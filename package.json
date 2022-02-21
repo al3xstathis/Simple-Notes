@@ -1,12 +1,11 @@
 {
   "name": "simple-notes",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "@mantine/core": "^3.5.0",
     "@mantine/hooks": "^3.5.0",
     "@mantine/notifications": "^3.5.1",
-    "@mantine/rte": "^3.5.2",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
@@ -14,7 +13,6 @@
     "framer-motion": "^5.5.5",
     "moment": "^2.29.1",
     "node-sass": "^7.0.1",
-    "p5": "^1.4.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-icons": "^4.3.1",
@@ -24,7 +22,6 @@
     "react-scripts": "5.0.0",
     "styled-components": "^5.3.3",
     "uuid": "^8.3.2",
-    "vanta": "^0.5.21",
     "web-vitals": "^2.1.2"
   },
   "scripts": {

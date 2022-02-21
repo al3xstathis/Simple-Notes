@@ -7,14 +7,14 @@ import moment from "moment";
 const NotePreview = ({onClick, note}) => {
     return (
         <NoteContainer background={note.color} onClick={onClick} direction={'column'} align={'flex-start'}>
-            <NoteHeader>
+            <NoteHeader justify={'space-between'}>
                 {note.title}
             </NoteHeader>
             <NoteContent>
                 {note.content}
             </NoteContent>
-            <NoteTime>
-                {moment(note.time).format('MMM D')}
+            <NoteTime justify={'flex-end'}>
+                {moment(note.time).format('MMM D YY')}
             </NoteTime>
         </NoteContainer>
     )
@@ -23,23 +23,35 @@ const NotePreview = ({onClick, note}) => {
 export default NotePreview
 
 const NoteContainer = styled(FlexBox)`
-  min-width: 140px;
+  min-width: 170px;
   max-width: 170px;
-  word-break: break-all;
+  word-break: break-word;
   height: max-content;
   background-color: ${props => props.background ? props.background : config.colors.black.black10};
   border-radius: 6px;
   padding: 10px;
   color: ${config.colors.white};
-  box-shadow: 0px 0px 12px 1px rgb(0 0 0 / 25%);
+  box-shadow: 0 0 12px 1px rgb(0 0 0 / 25%);
+  @media (max-width: 385px) {
+    min-width: 160px;
+    max-width: 160px;
+  }
+  @media (max-width: 365px) {
+    min-width: 150px;
+    max-width: 150px;
+  }
+  @media (max-width: 350px) {
+    min-width: 100%;
+    max-width: 100%;
+  }
 `
 
-const NoteHeader = styled.p`
+const NoteHeader = styled(FlexBox)`
   font-size: 16px;
+  width: 100%;
 `
 
 const NoteContent = styled(FlexBox)`
-  //max-height: 20px;
   margin-top: 10px;
   margin-bottom: 10px;
   display: -webkit-box;
@@ -52,5 +64,6 @@ const NoteContent = styled(FlexBox)`
 `
 
 const NoteTime = styled(FlexBox)`
-font-size: 12px;
+  font-size: 10px;
+  width: 100%;
 `

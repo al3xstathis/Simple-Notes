@@ -65,11 +65,10 @@ const Note = () => {
     return (
         <AnimatePresence>
             <NoteContainer
-                initial={{y: 100, opacity: 0}}
-                animate={{y: 0, opacity: 1}}
-                exit={{y: 100, opacity: 0}}
+                initial={{opacity: 0}}
+                animate={{opacity: 1}}
+                exit={{opacity: 0}}
                 transition={{duration: 0.5}}
-                align={'flex-start'}
                 direction={'column'}
             >
                 <Header justify={'center'}>
@@ -80,7 +79,7 @@ const Note = () => {
                     </CButton>
                     <CInput maxLength='20' name="title" onBlur={update}
                             onChange={e => handleChange(e.target.name, e.target.value)}
-                            style={{color: 'grey'}} placeholder={'Add a title'} value={newNote.title}/>
+                            placeholder={'Add a title'} value={newNote.title}/>
                 </Header>
                 <Tools justify={'center'}>
                     <ion-icon onClick={pin} style={{
@@ -105,7 +104,7 @@ const Note = () => {
                             placeholder={'Pick Color'}
                             variant={'unstyled'}
                         />
-                        <Date>{moment(newNote.date).format('DD/MM/YY')}</Date>
+                        <Date>{moment(newNote.date).format('MMM D YY')}</Date>
                     </Title>
 
                     <TextArea
@@ -136,12 +135,8 @@ const Note = () => {
 export default Note
 
 const NoteContainer = styled(FlexBox)`
-  z-index: 1;
-  height: 100vh;
-  position: absolute;
-  top: 0;
+  height: 100%;
   width: 100%;
-  background-color: ${config.colors.white};
 `
 
 const Header = styled(FlexBox)`
@@ -167,22 +162,26 @@ const Tools = styled(FlexBox)`
 `
 
 const CInput = styled.input`
-  background-color: ${config.colors.white};
   border: none;
   font-size: 20px;
   text-align: center;
+
+  &:focus {
+    outline: none;
+  }
 `
 
 const Content = styled(FlexBox)`
   width: 100%;
   padding: 15px;
   height: 100%;
+  max-width: 600px;
 `
 const Title = styled(FlexBox)`
-height: 15px;
-margin-bottom: 15px;
-width: 100%;
-font-size: 16px;
+  height: 15px;
+  margin-bottom: 15px;
+  width: 100%;
+  font-size: 16px;
 `
 
 const Date = styled.p`
@@ -196,7 +195,7 @@ const TextArea = styled.textarea`
   border: none;
   padding: 10px;
   font-size: 16px;
-  background-color: ${config.colors.white};
+
   &:focus {
     outline: none;
   }

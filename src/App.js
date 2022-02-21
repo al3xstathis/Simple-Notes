@@ -1,11 +1,11 @@
 import './styles.scss'
 import React, {useEffect, useState} from "react";
-import {Route, Routes, useLocation, useNavigate} from 'react-router-dom';
+import {Route, Routes, useNavigate} from 'react-router-dom';
 import {getAuth, onAuthStateChanged} from "firebase/auth"
 import Login from "./pages/auth/login";
 import Nav from "./pages";
 import {Header, Menu} from "@mantine/core";
-import styled from 'styled-components'
+import styled from "styled-components";
 
 
 function App() {
@@ -26,11 +26,6 @@ function App() {
         })
     }, []);
 
-    const signOut = () => {
-        auth.signOut()
-        setLoggedIn(false)
-    }
-
     if (loggedIn === false) {
         return (
             <Routes>
@@ -39,10 +34,22 @@ function App() {
         )
     }
 
+    const signOut = () => {
+        auth.signOut()
+    }
+
+
     return (
         <>
-            <Header height={50}>
-                <div style={{width: '100%', display: 'flex', alignItems: 'center', height: '100%', justifyContent: 'flex-start', paddingLeft: 16}}>
+            <Header style={{width: '100vw'}} height={50}>
+                <div style={{
+                    width: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    height: '100%',
+                    justifyContent: 'flex-start',
+                    paddingLeft: 16
+                }}>
                     <h3>Simple Notes</h3>
                     <CMenu shadow='lg' size='lg'>
                         <Menu.Label>{auth.currentUser?.displayName}</Menu.Label>
@@ -51,7 +58,6 @@ function App() {
                         </Menu.Item>
                     </CMenu>
                 </div>
-
             </Header>
             <Nav/>
         </>

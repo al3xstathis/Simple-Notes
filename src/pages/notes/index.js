@@ -8,7 +8,6 @@ import {getAuth} from 'firebase/auth'
 import {v4 as uuidv4} from 'uuid'
 import {useQueryClient} from "react-query";
 import {Input} from "@mantine/core";
-import Note from "./Note";
 import {IoAddSharp, IoSearch} from "react-icons/io5";
 import NotePreview from "./NotePreview";
 import {useNavigate} from "react-router";
@@ -38,7 +37,7 @@ const Notes = () => {
     ))
 
     const OpenNote = (o) => {
-        navigate(`/notes/${o.uid}`, { replace: true });
+        navigate(`/notes/${o.uid}`, {replace: true});
     }
 
     const addNote = async () => {
@@ -54,17 +53,23 @@ const Notes = () => {
         }
         await addNewNote.mutate(newNote, uid)
         await client.invalidateQueries(['notes', auth.currentUser.uid])
-        navigate(`/notes/${uid}`, { replace: true })
+        navigate(`/notes/${uid}`, {replace: true})
     }
 
     return (
-        <div>
-            <FlexBox justify={'space-between'} style={{paddingRight: 10}}>
+        <FlexBox
+            initial={{opacity: 0}}
+            animate={{opacity: 1}}
+            exit={{opacity: 0}}
+            direction={'column'}
+        >
+
+            <FlexBox justify={'space-between'} style={{paddingRight: 10, width: '100%', maxWidth: 800}}>
                 <CInput onChange={(e) => setSearchKey(e.target.value)} icon={<IoSearch/>}
                         placeholder={'search for note'}
                         variant={'unstyled'}
                 />
-                <StyledButton onClick={addNote} rightIcon={<IoAddSharp/>}
+                <StyledButton variant={'white'} onClick={addNote} rightIcon={<IoAddSharp/>}
                               size='sm'
                               compact radius={'sm'}>
                     add note
@@ -72,42 +77,39 @@ const Notes = () => {
             </FlexBox>
             <NotesContainer>
                 {pinned?.length > 0 &&
-                <ListContainer direction={'column'} align={'flex-start'}>
-                    <Header justify={'space-between'}>
-                        pinned
-                    </Header>
-                    <FlexBox style={{display: 'inline-flex', gap: '1rem', paddingTop: '1rem'}} wrap={'wrap'}
-                             align={'space-between'}>
-                        {pinnedList}
-                    </FlexBox>
+                    <ListContainer direction={'column'} align={'flex-start'}>
+                        <CHeader justify={'space-between'}>
+                            pinned
+                        </CHeader>
+                        <FlexBox style={{display: 'inline-flex', gap: '1rem', paddingTop: '1rem'}} wrap={'wrap'}
+                                 align={'space-between'} justify={'space-between'}>
+                            {pinnedList}
+                        </FlexBox>
 
-                </ListContainer>
+                    </ListContainer>
                 }
                 <ListContainer direction={'column'} align={'flex-start'}>
-                    <Header justify={'space-between'}>
+                    <CHeader justify={'space-between'}>
                         all notes
-                    </Header>
+                    </CHeader>
                     <FlexBox style={{display: 'inline-flex', gap: '1rem', paddingTop: '1rem'}} wrap={'wrap'}
-                             align={'space-between'}>
+                             align={'space-between'} justify={'space-between'}>
                         {notPinnedList}
                     </FlexBox>
                 </ListContainer>
             </NotesContainer>
-        </div>
+        </FlexBox>
     )
 }
 export default Notes
 
 const ListContainer = styled(FlexBox)`
   width: 100%;
-  padding-top: 0;
-  padding-left: 16px;
-  padding-right: 16px;
-  padding-bottom: 32px;
+  padding: 0 16px 32px;
   margin-inside: 16px;
 `
 
-const Header = styled(FlexBox)`
+const CHeader = styled(FlexBox)`
   font-size: 16px;
   width: 100%;
   color: ${config.colors.black.black0};
@@ -115,12 +117,16 @@ const Header = styled(FlexBox)`
 `
 
 const NotesContainer = styled.div`
-  // background-color: ${config.colors.white};
   min-height: 100%;
+  width: 100%;
   color: ${config.colors.black};
+  max-width: 800px;
+  @media (max-width: 800px) {
+    min-width: 100%;
+  }
 `
 
 const CInput = styled(Input)`
-  // background-color: ${config.colors.white};
   padding: 8px;
 `
+
