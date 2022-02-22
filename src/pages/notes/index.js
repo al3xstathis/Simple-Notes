@@ -65,11 +65,11 @@ const Notes = () => {
         >
 
             <FlexBox justify={'space-between'} style={{paddingRight: 10, width: '100%', maxWidth: 800}}>
-                <CInput onChange={(e) => setSearchKey(e.target.value)} icon={<IoSearch/>}
+                <CInput style={{color: 'white'}} onChange={(e) => setSearchKey(e.target.value)} icon={<IoSearch/>}
                         placeholder={'search for note'}
                         variant={'unstyled'}
                 />
-                <StyledButton variant={'white'} onClick={addNote} rightIcon={<IoAddSharp/>}
+                <StyledButton color={'white'} onClick={addNote} rightIcon={<IoAddSharp/>}
                               size='sm'
                               compact radius={'sm'}>
                     add note
@@ -112,14 +112,13 @@ const ListContainer = styled(FlexBox)`
 const CHeader = styled(FlexBox)`
   font-size: 16px;
   width: 100%;
-  color: ${config.colors.black.black0};
+  color: ${config.colors.white};
   opacity: .9;
 `
 
 const NotesContainer = styled.div`
   min-height: 100%;
   width: 100%;
-  color: ${config.colors.black};
   max-width: 800px;
   @media (max-width: 800px) {
     min-width: 100%;
@@ -128,5 +127,12 @@ const NotesContainer = styled.div`
 
 const CInput = styled(Input)`
   padding: 8px;
+  
+  ::placeholder {
+    color: white;
+  }
+  input {
+    color: white;
+  }
 `
 

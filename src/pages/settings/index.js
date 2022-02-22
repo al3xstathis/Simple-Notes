@@ -25,7 +25,7 @@ const Settings = () => {
                 <p>
                     Click here to sign out
                 </p>
-                <CButton onClick={() => signOut()} compact size={'xs'} radius="xs">Sign out</CButton>
+                <CButton color={'white'} variant={'outline'} onClick={() => signOut()} compact size={'xs'} radius="xs">Sign out</CButton>
             </FlexBox>
         </>
     )
@@ -34,8 +34,8 @@ const Settings = () => {
 export default Settings
 
 const CButton = styled(Button)`
-background-color: ${config.colors.red};
-  
+  color: ${config.colors.white};  
+  border-color: ${config.colors.white};
   &:focus {
     background-color: ${config.colors.white};
     color: ${config.colors.red};

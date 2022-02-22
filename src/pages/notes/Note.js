@@ -72,7 +72,7 @@ const Note = () => {
                 direction={'column'}
             >
                 <Header justify={'space-between'}>
-                    <CButton variant={'outline'} radius={'xs'} onClick={() => {
+                    <CButton style={{color: config.colors.white}} variant={'outline'} radius={'xs'} onClick={() => {
                         navigate('/notes')
                     }}>
                         <IoIosArrowRoundBack/>
@@ -144,6 +144,8 @@ const Header = styled(FlexBox)`
   padding: 0.4rem 1rem;
   max-width: 100%;
   font-size: 20px;
+  color: ${config.colors.white};
+
 `
 
 const CButton = styled(StyledButton)`
@@ -168,9 +170,16 @@ const CInput = styled.input`
   font-size: 20px;
   text-align: center;
   width: 60%;
+  color: ${config.colors.white};
+  background-color: transparent;
 
   &:focus {
     outline: none;
+  }
+  
+  input {
+    color: ${config.colors.white};
+    background-color: transparent;
   }
 `
 
@@ -199,6 +208,9 @@ const TextArea = styled.textarea`
   border: none;
   padding: 10px;
   font-size: 16px;
+  background-color: transparent;
+  color: ${config.colors.white};
+
 
   &:focus {
     outline: none;
@@ -208,4 +220,8 @@ const TextArea = styled.textarea`
 const CColorInput = styled(ColorInput)`
   background-color: transparent;
   font-size: 16px;
+  input {
+    color: ${config.colors.white};
+
+  }
 `

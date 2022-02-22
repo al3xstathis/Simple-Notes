@@ -4,10 +4,11 @@ import {Route, Routes, useLocation, useNavigate} from 'react-router-dom';
 import {getAuth, onAuthStateChanged} from "firebase/auth"
 import Login from "./pages/auth/login";
 import Nav from "./pages";
-import {Header, Menu} from "@mantine/core";
 import styled from "styled-components";
 import {IoIosCog} from "react-icons/io";
 import {IoHomeOutline} from "react-icons/io5";
+import {FlexBox} from "./styles";
+import {config} from './config/index'
 
 
 function App() {
@@ -41,7 +42,7 @@ function App() {
 
     return (
         <>
-            <Header style={{width: '100vw'}} height={50}>
+            <Header fluid={'true'}>
                 <div style={{
                     width: '100%',
                     display: 'flex',
@@ -79,4 +80,9 @@ const Settings = styled.div`
 const Home = styled.div`
   font-size: 24px;
   height: 24px;
+`
+
+const Header = styled(FlexBox)`
+  height: 50px;
+  color: ${config.colors.white};
 `

@@ -7,7 +7,7 @@ import {
     signInWithPopup
 } from "firebase/auth";
 import styled from 'styled-components'
-import {FlexBox} from "../../styles";
+import {FlexBox, StyledButton} from "../../styles";
 import {config} from "../../config";
 import {Button, TextInput} from "@mantine/core";
 import {useCreateUser} from "../../hooks/user.hooks";
@@ -175,8 +175,8 @@ const Login = () => {
                     {...form.getInputProps('password')}
                 />
                 <FlexBox justify={'flex-end'} style={{paddingTop: 10}}>
-                    {inOut ? <Button type="submit" variant={'default'} radius="xs">sign in</Button> :
-                        <Button type="submit" variant={'default'} radius="xs">sign up</Button>
+                    {inOut ? <StyledButton color={'white'} type="submit" variant={'default'} radius="xs">sign in</StyledButton> :
+                        <StyledButton color={'white'} type="submit" variant={'default'} radius="xs">sign up</StyledButton>
                     }
                 </FlexBox>
             </StyledForm>
