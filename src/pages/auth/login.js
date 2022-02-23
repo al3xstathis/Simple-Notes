@@ -61,20 +61,6 @@ const Login = () => {
                     title: 'Successfully logged in with Google.',
                     autoClose: 2000
                 })
-                if (moment(res.user.metadata.creationTime).format() === moment(res.user.metadata.lastSignInTime).format()) {
-                    const uid = uuidv4()
-                    const newNote = {
-                        time: moment().format(),
-                        pinned: false,
-                        title: 'First Note',
-                        content: 'Hey This is your first note! You can edit the title, background ' +
-                            'color and content of this note. Pin it to keep track of important notes or delete it when you\'re done with it.',
-                        color: '',
-                        creator: auth.currentUser.uid,
-                        uid: uid
-                    }
-                    addNewNote.mutate(newNote, uid)
-                }
             })
 
     }
