@@ -1,5 +1,5 @@
 import React from 'react'
-import {FlexBox} from "../../styles";
+import {FlexBox, StyledButton} from "../../styles";
 import {Button} from "@mantine/core";
 import styled from 'styled-components'
 import {config} from "../../config";
@@ -25,7 +25,7 @@ const Settings = () => {
                 <p>
                     Click here to sign out
                 </p>
-                <CButton color={'white'} variant={'outline'} onClick={() => signOut()} compact size={'xs'} radius="xs">Sign out</CButton>
+                <StyledButton color={config.colors.white} background={'#E7017A linear-gradient(91.78deg, #E7017A 2.57%, #DF4A1F 96.33%)'} onClick={() => signOut()} compact size={'sm'} radius="xs">Sign out</StyledButton>
             </FlexBox>
         </>
     )
@@ -33,11 +33,3 @@ const Settings = () => {
 
 export default Settings
 
-const CButton = styled(Button)`
-  color: ${config.colors.white};  
-  border-color: ${config.colors.white};
-  &:focus {
-    background-color: ${config.colors.white};
-    color: ${config.colors.red};
-  }
-`

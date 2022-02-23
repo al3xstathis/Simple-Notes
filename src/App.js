@@ -43,15 +43,7 @@ function App() {
     return (
         <>
             <Header fluid={'true'}>
-                <div style={{
-                    width: '100%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    height: '100%',
-                    justifyContent: 'space-between',
-                    paddingLeft: 16,
-                    paddingRight: 16
-                }}>
+                <InnerHeader fluid={'true'} align={'center'} justify={'space-between'}>
                     <h3>Simple Notes</h3>
                     {location.pathname === '/settings' ?
                         <Home onClick={() => navigate('/notes')}>
@@ -63,7 +55,7 @@ function App() {
                         </Settings>
                         : location.pathname === '/notes/:noteid' && null
                     }
-                </div>
+                </InnerHeader>
             </Header>
             <Nav/>
         </>
@@ -83,6 +75,13 @@ const Home = styled.div`
 `
 
 const Header = styled(FlexBox)`
-  height: 50px;
   color: ${config.colors.white};
+`
+
+const InnerHeader = styled(FlexBox)`
+  background: #E7017A linear-gradient(91.78deg, #E7017A 2.57%, #DF4A1F 96.33%);
+  margin: 0.6rem;
+  border-radius: 0.4rem;
+  height: 50px;
+  padding: 0 1rem;
 `

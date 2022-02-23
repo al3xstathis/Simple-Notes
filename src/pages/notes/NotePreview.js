@@ -6,7 +6,7 @@ import moment from "moment";
 
 const NotePreview = ({onClick, note}) => {
     return (
-        <NoteContainer background={note.color} onClick={onClick} direction={'column'} align={'flex-start'}>
+        <NoteContainer pinned={note.pinned ? 1 : 0} background={note.color} onClick={onClick} direction={'column'} align={'flex-start'}>
             <NoteHeader justify={'space-between'}>
                 {note.title}
             </NoteHeader>
@@ -23,15 +23,17 @@ const NotePreview = ({onClick, note}) => {
 export default NotePreview
 
 const NoteContainer = styled(FlexBox)`
-  min-width: 170px;
-  max-width: 170px;
+  cursor: pointer;
+  min-width: 160px;
+  max-width: 160px;
   word-break: break-word;
   height: max-content;
-  background-color: ${props => props.background ? props.background : config.colors.black.black10};
+  background-color: ${props => props.pinned ? '#e7017ac2' : '#df4a1fbf'};
   border-radius: 6px;
   padding: 10px;
   color: ${config.colors.white};
   box-shadow: 0 0 12px 1px rgb(0 0 0 / 25%);
+  border: 0.1px solid rgba(255, 255, 255, 0.2);
   @media (max-width: 385px) {
     min-width: 160px;
     max-width: 160px;

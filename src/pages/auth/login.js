@@ -145,7 +145,7 @@ const Login = () => {
             <StyledForm
                 onSubmit={form.onSubmit(handleSubmit)}>
                 {!inOut &&
-                    <TextInput
+                    <CInput
                         autoComplete={'name'}
                         style={{paddingBottom: 10}}
                         type={'name'}
@@ -156,7 +156,7 @@ const Login = () => {
                         {...form.getInputProps('name')}
                     />
                 }
-                <TextInput
+                <CInput
                     autoComplete={'email'}
                     style={{paddingBottom: 10}}
                     type={'email'}
@@ -166,7 +166,7 @@ const Login = () => {
                     placeholder="your@email.com"
                     {...form.getInputProps('email')}
                 />
-                <TextInput
+                <CInput
                     autoComplete={'password'}
                     type={'password'}
                     required
@@ -175,31 +175,30 @@ const Login = () => {
                     {...form.getInputProps('password')}
                 />
                 <FlexBox justify={'flex-end'} style={{paddingTop: 10}}>
-                    {inOut ? <StyledButton color={'white'} type="submit" variant={'default'} radius="xs">sign in</StyledButton> :
-                        <StyledButton color={'white'} type="submit" variant={'default'} radius="xs">sign up</StyledButton>
+                    {inOut ? <StyledButton  color={'white'} type="submit" compact variant={'default'} radius="xs">sign in</StyledButton> :
+                        <StyledButton color={'white'} type="submit" compact variant={'default'} radius="xs">sign up</StyledButton>
                     }
                 </FlexBox>
             </StyledForm>
-            <FlexBox justify={'space-around'} style={{width: '60%', maxWidth: '300px'}}>
-                <p>or</p>
-                <Button onClick={google} rightIcon={<IoLogoGoogle/>} style={{backgroundColor: config.colors.red}}
+            <FlexBox justify={'space-around'} style={{maxWidth: '300px'}}>
+                <StyledButton width={'200px'} color={config.colors.white} background={'#E7017A linear-gradient(91.78deg, #E7017A 2.57%, #DF4A1F 96.33%)'} onClick={google} rightIcon={<IoLogoGoogle/>} style={{backgroundColor: config.colors.red}}
                         radius="xs">
-                    join with
-                </Button>
+                    sign in with
+                </StyledButton>
             </FlexBox>
             {inOut ?
                 <FlexBox style={{fontSize: 12}}>
                     <p>don't have an account?</p>
-                    <p onClick={() => setInOut(0)} style={{color: config.colors.red, paddingLeft: 5}}>
+                    <CText onClick={() => setInOut(0)} style={{color: config.colors.white, paddingLeft: 5}}>
                         sign up
-                    </p>
+                    </CText>
                 </FlexBox>
                 :
                 <FlexBox style={{fontSize: 12}}>
                     <p>already have an account?</p>
-                    <p onClick={() => setInOut(1)} style={{color: config.colors.red, paddingLeft: 5}}>
+                    <CText onClick={() => setInOut(1)} style={{color: config.colors.white, paddingLeft: 5}}>
                         sign in
-                    </p>
+                    </CText>
                 </FlexBox>
             }
 
@@ -217,4 +216,22 @@ const LoginContainer = styled(FlexBox)`
 const StyledForm = styled.form`
   width: 80%;
   max-width: 300px;
+`
+
+const CText = styled.p`
+  background: #E7017A linear-gradient(91.78deg, #E7017A 2.57%, #DF4A1F 96.33%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+`
+
+const CInput = styled(TextInput)`
+  color: ${config.colors.white};
+  input {
+    background-color: transparent;
+    color: ${config.colors.white};
+    &:focus {
+      border-color: #E7017A;
+    }
+  }
+  
 `

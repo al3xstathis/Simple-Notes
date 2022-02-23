@@ -14,5 +14,9 @@ export const FlexBox = styled(motion.div)`
 
 export const StyledButton = styled(Button)`
   color: ${props => props.color ? props.color : config.colors.black.black90};
-  background-color: transparent;
+  background: ${props => props.background ? props.background : 'transparent'};
+  &:hover, &:focus {
+    background-color: transparent;
+  }
+  width: ${props => props.width};
 `

@@ -69,35 +69,41 @@ const Notes = () => {
                         placeholder={'search for note'}
                         variant={'unstyled'}
                 />
-                <StyledButton color={'white'} onClick={addNote} rightIcon={<IoAddSharp/>}
+                <StyledButton color={'white'}
+                              background={'#E7017A linear-gradient(91.78deg, #E7017A 2.57%, #DF4A1F 96.33%)'}
+                              onClick={addNote} rightIcon={<IoAddSharp/>}
                               size='sm'
                               compact radius={'sm'}>
                     add note
                 </StyledButton>
             </FlexBox>
-            <NotesContainer>
-                {pinned?.length > 0 &&
-                    <ListContainer direction={'column'} align={'flex-start'}>
-                        <CHeader justify={'space-between'}>
-                            pinned
-                        </CHeader>
-                        <FlexBox style={{display: 'inline-flex', gap: '1rem', paddingTop: '1rem'}} wrap={'wrap'}
-                                 align={'space-between'} justify={'space-between'}>
-                            {pinnedList}
-                        </FlexBox>
+            <div style={{padding: 10, width: '100%'}}>
+                <NotesContainer>
+                    {pinned?.length > 0 &&
+                        <ListContainer direction={'column'} align={'flex-start'}>
+                            <CHeader justify={'space-between'}>
+                                pinned
+                            </CHeader>
+                            <FlexBox style={{display: 'inline-flex', gap: '1rem', paddingTop: '1rem'}} wrap={'wrap'}
+                                     align={'space-between'} justify={'space-between'}>
+                                {pinnedList}
+                            </FlexBox>
 
-                    </ListContainer>
-                }
-                <ListContainer direction={'column'} align={'flex-start'}>
-                    <CHeader justify={'space-between'}>
-                        all notes
-                    </CHeader>
-                    <FlexBox style={{display: 'inline-flex', gap: '1rem', paddingTop: '1rem'}} wrap={'wrap'}
-                             align={'space-between'} justify={'space-between'}>
-                        {notPinnedList}
-                    </FlexBox>
-                </ListContainer>
-            </NotesContainer>
+                        </ListContainer>
+                    }
+                    {notPinned?.length > 0 &&
+                        <ListContainer direction={'column'} align={'flex-start'}>
+                            <CHeader justify={'space-between'}>
+                                all notes
+                            </CHeader>
+                            <FlexBox style={{display: 'inline-flex', gap: '1rem', paddingTop: '1rem'}} wrap={'wrap'}
+                                     align={'space-between'} justify={'space-between'}>
+                                {notPinnedList}
+                            </FlexBox>
+                        </ListContainer>
+                    }
+                </NotesContainer>
+            </div>
         </FlexBox>
     )
 }
@@ -105,8 +111,11 @@ export default Notes
 
 const ListContainer = styled(FlexBox)`
   width: 100%;
-  padding: 0 16px 32px;
+  padding: 1rem;
   margin-inside: 16px;
+  background: rgba(90, 90, 90, 0.16);
+  border-radius: 0.4rem;
+  margin-bottom: 1.8rem;
 `
 
 const CHeader = styled(FlexBox)`
@@ -127,10 +136,11 @@ const NotesContainer = styled.div`
 
 const CInput = styled(Input)`
   padding: 8px;
-  
+
   ::placeholder {
     color: white;
   }
+
   input {
     color: white;
   }

@@ -83,7 +83,7 @@ const Note = () => {
                     <Tools justify={'center'}>
                         <ion-icon onClick={pin} style={{
                             padding: '4px',
-                            color: newNote?.pinned ? config.colors.red : config.colors.black90
+                            color: newNote?.pinned ? '#e7017ac2' : config.colors.black90
                         }} name='pin-outline'>
 
                         </ion-icon>
@@ -95,16 +95,6 @@ const Note = () => {
 
                 <Content direction={'column'} align={'flex-start'}>
                     <Title justify={'space-between'}>
-                        <CColorInput
-                            style={{fontSize: 16}}
-                            onBlur={update}
-                            value={newNote.color}
-                            onChange={(e) => handleColor(e)}
-                            name="color"
-                            // withPicker={false}
-                            placeholder={'Pick Color'}
-                            variant={'unstyled'}
-                        />
                         <Date>{moment(newNote.date).format('MMM D YY')}</Date>
                     </Title>
 
@@ -142,9 +132,10 @@ const NoteContainer = styled(FlexBox)`
 
 const Header = styled(FlexBox)`
   padding: 0.4rem 1rem;
-  max-width: 100%;
+  width: 100%;
   font-size: 20px;
   color: ${config.colors.white};
+  border-bottom: 0.1px solid rgba(255, 255, 255, 0.2);
 
 `
 
@@ -184,7 +175,6 @@ const CInput = styled.input`
 `
 
 const Content = styled(FlexBox)`
-  border-top: 0.1px solid rgba(128, 128, 128, 0.21);
   width: 100%;
   padding: 1rem;
   height: 100%;
@@ -206,7 +196,7 @@ const TextArea = styled.textarea`
   max-width: 100%;
   min-width: 100%;
   border: none;
-  padding: 10px;
+  //padding: 10px;
   font-size: 16px;
   background-color: transparent;
   color: ${config.colors.white};
